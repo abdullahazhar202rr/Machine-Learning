@@ -1,0 +1,88 @@
+# ====================================
+# Python
+# ====================================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# ====================================
+# Virtual Environments
+# ====================================
+venv*/
+env*/
+.venv*/
+
+# ====================================
+# Jupyter Notebook Checkpoints
+# ====================================
+**/.ipynb_checkpoints/
+
+# ====================================
+# Data Files
+# ====================================
+**/*.csv
+**/*.tsv
+**/*.data
+**/*.dat
+**/*.arff
+**/*.json
+**/*.xlsx
+**/*.zip
+**/*.tar
+**/*.tar.gz
+
+# ====================================
+# Logs
+# ====================================
+**/*.log
+**/*.out
+**/*.err
+
+# ====================================
+# OS-Specific
+# ====================================
+.DS_Store
+Thumbs.db
+
+# ====================================
+# IDE / Editor Settings
+# ====================================
+.vscode/
+.idea/
+
+# ====================================
+# ML Models & Checkpoints
+# ====================================
+**/*.h5
+**/*.hdf5
+**/*.pkl
+**/*.joblib
+**/*.pt
+**/*.pth
+**/*.onnx
+**/*.pb
+**/*.ckpt
+**/*.tflite
+
+# ====================================
+# YOLO / Darknet
+# ====================================
+**/*.weights
+**/*.cfg
+**/*.names
+**/backup/
+
+# ====================================
+# TensorFlow / PyTorch Training Artifacts
+# ====================================
+events.out.tfevents.*
+**/checkpoints/
+
+# ====================================
+# Specific Large Folders
+# ====================================
+Projects/virtual try on model(totally working)/preprocessing/Single-Human-Parsing-LIP/
+Projects/virtual try on model(totally working)/preprocessing/openpose/
+Projects/Object_Detection/With WEB/venv/
