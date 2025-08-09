@@ -1,79 +1,48 @@
-## Our Team's Follow-up Research
+# Virtual Try-On Model (Totally Working)
 
-**1. [NEW!] PromptDresser (https://github.com/rlawjdghek/PromptDresser) - Arxiv 24.12**<br>
-2. StableVITON (https://github.com/rlawjdghek/StableVITON) - CVPR 2024<br>
-3. HR-VITON (https://github.com/sangyun884/HR-VITON) - ECCV 2022
+**A plug-and-play offline virtual try-on system for fashion and e-commerce applications.**
 
-# VITON-HD &mdash; Official PyTorch Implementation
+---
 
-**\*\*\*\*\* 2025-04-27: The link to the dataset has been updated. We apologize for the inconvenience. \*\*\*\*\***
+##  Overview
 
-![Teaser image](./assets/teaser.png)
+Easily preview how a piece of clothing will look on a person using just two images — one of the person and one of the garment. This model requires no manual preprocessing and produces clean, realistic results with minimal setup, perfect for designers, developers, and vision enthusiasts.
 
-> **VITON-HD: High-Resolution Virtual Try-On via Misalignment-Aware Normalization**<br>
-> [Seunghwan Choi](https://github.com/shadow2496)\*<sup>1</sup>, [Sunghyun Park](https://psh01087.github.io)\*<sup>1</sup>, [Minsoo Lee](https://github.com/Minsoo2022)\*<sup>1</sup>, [Jaegul Choo](https://sites.google.com/site/jaegulchoo)<sup>1</sup><br>
-> <sup>1</sup>KAIST<br>
-> In CVPR 2021. (* indicates equal contribution)
+---
 
-> Paper: https://arxiv.org/abs/2103.16874<br>
-> Project page: https://psh01087.github.io/VITON-HD
+##  Key Features
 
-> **Abstract:** *The task of image-based virtual try-on aims to transfer a target clothing item onto the corresponding region of a person, which is commonly tackled by fitting the item to the desired body part and fusing the warped item with the person. While an increasing number of studies have been conducted, the resolution of synthesized images is still limited to low (e.g., 256x192), which acts as the critical limitation against satisfying online consumers. We argue that the limitation stems from several challenges: as the resolution increases, the artifacts in the misaligned areas between the warped clothes and the desired clothing regions become noticeable in the final results; the architectures used in existing methods have low performance in generating high-quality body parts and maintaining the texture sharpness of the clothes. To address the challenges, we propose a novel virtual try-on method called VITON-HD that successfully synthesizes 1024x768 virtual try-on images. Specifically, we first prepare the segmentation map to guide our virtual try-on synthesis, and then roughly fit the target clothing item to a given person's body. Next, we propose ALIgnment-Aware Segment (ALIAS) normalization and ALIAS generator to handle the misaligned areas and preserve the details of 1024x768 inputs. Through rigorous comparison with existing methods, we demonstrate that VITON-HD highly surpasses the baselines in terms of synthesized image quality both qualitatively and quantitatively.*
+- Fully offline — no API or internet required  
+- Requires only two images: person + garment  
+- Automatic human parsing, pose detection, and cloth warping  
+- High-quality output with realistic alignment  
+- Simple, no-code script for easy usage  
+- Built with Python, TensorFlow, PyTorch, and OpenCV
 
-## Dataset
+---
 
-We collected a 1024×768 virtual try-on dataset for **research purposes only**.
-You can download the preprocessed dataset from [here](https://drive.google.com/file/d/1tLx8LRp-sxDp0EcYmYoV_vXdSc-jJ79w/view?usp=sharing).
-The frontal-view woman and top-clothing image pairs are split into training and test sets with 11,647 and 2,032 pairs, respectively. 
+##  Requirements
 
-## Installation
+| Item              | Version / Notes                      |
+|------------------|--------------------------------------|
+| Python            | 3.7+                                 |
+| TensorFlow        | Listed in `requirements.txt`         |
+| PyTorch           | Listed in `requirements.txt`         |
+| OpenCV            | Installed via `requirements.txt`     |
+| GPU (optional)    | Recommended for faster inference     |
 
-Clone this repository:
+---
 
-```
-git clone https://github.com/shadow2496/VITON-HD.git
-cd ./VITON-HD/
-```
+##  Installation
 
-Install PyTorch and other dependencies:
+```bash
+# Clone the project
+git clone <REPO_URL>
+cd 'Projects/virtual try on model (totally working)'
 
-```
-conda create -y -n [ENV] python=3.8
-conda activate [ENV]
-conda install -y pytorch=[>=1.6.0] torchvision cudatoolkit=[>=9.2] -c pytorch
-pip install opencv-python torchgeometry
-```
+# Create a virtual environment (recommended)
+python -m venv venv
+.\venv\Scripts\activate
 
-## Pre-trained networks
-
-We provide pre-trained networks and sample images from the test dataset. Please download `*.pkl` and test images from the [VITON-HD Google Drive folder](https://drive.google.com/drive/folders/0B8kXrnobEVh9fnJHX3lCZzEtd20yUVAtTk5HdWk2OVV0RGl6YXc0NWhMOTlvb1FKX3Z1OUk?resourcekey=0-OIXHrDwCX8ChjypUbJo4fQ&usp=sharing) and unzip `*.zip` files. `test.py` assumes that the downloaded files are placed in `./checkpoints/` and `./datasets/` directories.
-
-## Testing
-
-To generate virtual try-on images, run:
-
-```
-CUDA_VISIBLE_DEVICES=[GPU_ID] python test.py --name [NAME]
-```
-
-The results are saved in the `./results/` directory. You can change the location by specifying the `--save_dir` argument. To synthesize virtual try-on images with different pairs of a person and a clothing item, edit `./datasets/test_pairs.txt` and run the same command.
-
-> [!Note]
-> The preprocessing code for clothing-agnostic person representation differs slightly in [HR-VITON](https://github.com/sangyun884/HR-VITON).
-
-## License
-
-All material is made available under [Creative Commons BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). You can **use, redistribute, and adapt** the material for **non-commercial purposes**, as long as you give appropriate credit by **citing our paper** and **indicate any changes** that you've made.
-
-## Citation
-
-If you find this work useful for your research, please cite our paper:
-
-```
-@inproceedings{choi2021viton,
-  title={VITON-HD: High-Resolution Virtual Try-On via Misalignment-Aware Normalization},
-  author={Choi, Seunghwan and Park, Sunghyun and Lee, Minsoo and Choo, Jaegul},
-  booktitle={Proc. of the IEEE conference on computer vision and pattern recognition (CVPR)},
-  year={2021}
-}
-```
+# Install dependencies
+pip install -r requirements.txt
