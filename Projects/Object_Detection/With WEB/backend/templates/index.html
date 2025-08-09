@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Object Detection using YOLO</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #4a6bff;
+      --secondary-color: #00c9ff;
+      --text-color: #333;
+      --bg-color: #f5f7ff;
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --border-radius: 12px;
+      --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    .dark-mode {
+      --primary-color: #5d7dff;
+      --secondary-color: #00d9ff;
+      --text-color: #f0f0f0;
+      --bg-color: #121212;
+      --card-bg: rgba(30, 30, 30, 0.9);
+      --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      flex-direction: column;
+      transition: var(--transition);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      width: 100%;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: var(--primary-color);
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto 20px;
+    }
+
+    .header-social {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 15px;
+    }
+
+    .social-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: var(--text-color);
+      transition: var(--transition);
+    }
+
+    .social-item:hover {
+      color: var(--primary-color);
+      transform: translateY(-3px);
+    }
+
+    .social-icon {
+      font-size: 1.8rem;
+      margin-bottom: 5px;
+    }
+
+    .social-text {
+      font-size: 0.9rem;
+    }
+
+    .upload-card {
+      background: var(--card-bg);
+      padding: 40px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      margin-bottom: 40px;
+      transition: var(--transition);
+    }
+
+    .upload-area {
+      /* border: 2px dashed #ccc; */
+      border-radius: var(--border-radius);
+      padding: 40px 20px;
+      margin: 20px 0;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .upload-area:hover {
+      border-color: var(--primary-color);
+      background: rgba(74, 107, 255, 0.05);
+    }
+
+    .upload-area i {
+      font-size: 3rem;
+      color: var(--primary-color);
+      margin-bottom: 15px;
+    }
+
+    .upload-area p {
+      margin-bottom: 10px;
+    }
+
+    .upload-area .file-types {
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    .btn {
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 20px;
+      box-shadow: 0 4px 15px rgba(74, 107, 255, 0.3);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(74, 107, 255, 0.4);
+    }
+
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .how-it-works {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 700px;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+
+    .step {
+      flex: 1;
+      min-width: 150px;
+      text-align: center;
+      padding: 20px;
+      margin: 10px;
+    }
+
+    .step-number {
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .step h3 {
+      margin-bottom: 10px;
+      color: var(--primary-color);
+    }
+
+    .result-section {
+      width: 100%;
+      text-align: center;
+      margin: 40px 0;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .result-image {
+      max-width: 100%;
+      width: 800px;
+      height: auto;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      margin-top: 20px;
+      max-height: 600px;
+      object-fit: contain;
+    }
+
+    .loading-animation {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(74, 107, 255, 0.2);
+      border-radius: 50%;
+      border-top-color: var(--primary-color);
+      animation: spin 1s ease-in-out infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .footer {
+      margin-top: 60px;
+      text-align: center;
+      font-size: 0.9rem;
+      opacity: 0.8;
+      width: 100%;
+    }
+
+    .footer-social {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 20px 0;
+    }
+
+    .footer-credits {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .dark-mode .footer-credits {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .toggle-container {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toggle-label {
+      font-size: 0.9rem;
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(30px);
+    }
+
+    @media (max-width: 768px) {
+      .how-it-works {
+        flex-direction: column;
+      }
+      
+      .step {
+        margin-bottom: 20px;
+      }
+
+      .header-social, .footer-social {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .result-image {
+        width: 100%;
+        max-height: 400px;
+      }
+    }
+    .flex{
+        display: flex;
+        gap: 100px;
+    }
+  </style>
+</head>
+<body>
+  <div class="toggle-container">
+    <span class="toggle-label">Dark Mode</span>
+    <label class="toggle-switch">
+      <input type="checkbox" id="darkModeToggle">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <h1>Object Detection</h1>
+      <p>Upload an image and our AI will identify and locate objects within it. Get accurate detection results in seconds.</p>
+      
+      <div class="header-social">
+        <a href="https://github.com/abdullahazhar202rr" target="_blank" class="social-item">
+          <i class="fab fa-github social-icon"></i>
+          <span class="social-text">GitHub</span>
+        </a>
+        <a href="https://linkedin.com/in/abdullahazhar202" target="_blank" class="social-item">
+          <i class="fab fa-linkedin social-icon"></i>
+          <span class="social-text">LinkedIn</span>
+        </a>
+      </div>
+    </div>
+<div class="flex">
+
+    <div class="upload-card">
+        <label for="fileInput" class="upload-area" id="dropArea">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Drag & drop your image here or click to browse</p>
+            <p class="file-types">Supported formats: JPEG, PNG | Max-size: 5MB</p>
+            <p><small>Your image will be processed securely</small></p>
+      </label>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" id="fileInput" name="file" accept="image/*" required>
+        <button type="submit" id="uploadBtn" class="btn">Upload</button>
+      </form>
+      
+      
+    </div>
+    
+    
+
+       <div class="result-section" id="resultSection">
+      {% if processed_image %}
+      <div class="resulted">
+
+          <h2>Detected Objects</h2>
+          <img src="{{ processed_image }}" alt="Detected Image" class="result-image">
+        </div>
+      {% else %}
+        <div class="loading-animation" id="loadingAnimation">
+            <div class="spinner"></div>
+            <p>Processing your image...</p>
+        </div>
+        {% endif %}
+    </div>
+    </div>
+    <div class="how-it-works">
+        <div class="step">
+            <div class="step-number">1</div>
+        <h3>Upload</h3>
+        <p>Drag & drop or select an image to upload</p>
+    </div>
+    <div class="step">
+        <div class="step-number">2</div>
+        <h3>Process</h3>
+        <p>Our AI algorithms analyze your image</p>
+    </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Results</h3>
+        <p>View detected objects with bounding boxes</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-social">
+        <a href="https://github.com/abdullahazhar202rr" target="_blank" class="social-item">
+          <i class="fab fa-github social-icon"></i>
+          <span class="social-text">GitHub</span>
+        </a>
+        <a href="https://linkedin.com/in/abdullahazhar202" target="_blank" class="social-item">
+          <i class="fab fa-linkedin social-icon"></i>
+          <span class="social-text">LinkedIn</span>
+        </a>
+      </div>
+      
+      <div class="footer-credits">
+        <p>Developed with ❤️ by <strong>Abdullah Azhar</strong></p>
+        <p>© 2025 Object Detection App by Abdullah Azhar</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+
+
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      body.classList.add('dark-mode');
+      darkModeToggle.checked = true;
+    }
+
+    darkModeToggle.addEventListener('change', () => {
+      if (darkModeToggle.checked) {
+        body.classList.add('dark-mode');
+        localStorage.setItem('darkMode', 'enabled');
+      } else {
+        body.classList.remove('dark-mode');
+        localStorage.setItem('darkMode', 'disabled');
+      }
+    });
+
+    const dropArea = document.getElementById('dropArea');
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const resultSection = document.getElementById('resultSection');
+    const loadingAnimation = document.getElementById('loadingAnimation');
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      dropArea.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropArea.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropArea.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight() {
+      dropArea.style.borderColor = 'var(--primary-color)';
+      dropArea.style.backgroundColor = 'rgba(74, 107, 255, 0.1)';
+    }
+
+    function unhighlight() {
+      dropArea.style.borderColor = '#ccc';
+      dropArea.style.backgroundColor = 'transparent';
+    }
+
+    dropArea.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      if (files.length) {
+        fileInput.files = files;
+        updateFileName();
+      }
+    }
+
+    fileInput.addEventListener('change', updateFileName);
+
+    function updateFileName() {
+      if (fileInput.files.length) {
+        const fileName = fileInput.files[0].name;
+        uploadBtn.textContent = `Upload ${fileName}`;
+      }
+    }
+
+
+    uploadBtn.addEventListener('click', async () => {
+      if (fileInput.files.length) {
+
+
+        
+
+        await new Promise(resolve => {
+            
+            setTimeout(resolve, 2000)
+        
+        });
+        
+       
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          
+          resultSection.innerHTML = `
+            <h2>Detected Objects</h2>
+            <img src="${e.target.result}" alt="Processed Image" class="result-image">
+          `;
+
+          uploadBtn.disabled = false;
+        };
+        
+        reader.readAsDataURL(file);
+      } else {
+        fileInput.click();
+      }
+    });
+    document.querySelector("input[type='file']").addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    if (file && file.size > 5 * 1024 * 1024) {
+      alert("File size exceeds 5MB limit!");
+      e.target.value = ""; 
+    }})
+    const form = document.querySelector("form");
+
+form.addEventListener("submit", () => {
+  loadingAnimation.style.display = "flex";
+});
+
+  </script>
+</body>
+</html>

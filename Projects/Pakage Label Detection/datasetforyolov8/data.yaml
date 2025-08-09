@@ -1,0 +1,5 @@
+train: train/images
+val: valid/images
+
+nc: 5
+names: ['BB', 'Batch', 'MFG', 'RS', 'TimeStamp']

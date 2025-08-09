@@ -1,0 +1,13 @@
+names:
+- Fire
+- smoke
+nc: 2
+roboflow:
+  license: CC BY 4.0
+  project: fire-wrpgm
+  url: https://universe.roboflow.com/custom-thxhn/fire-wrpgm/dataset/8
+  version: 8
+  workspace: custom-thxhn
+test: ./test/images
+train: ./train/images
+val: ./valid/images
