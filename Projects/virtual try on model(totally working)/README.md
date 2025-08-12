@@ -34,6 +34,7 @@ Easily preview how a piece of clothing will look on a person using just two imag
 ---
 
 ##  Installation
+<<<<<<< HEAD
 
 ```bash
 # Clone the ML repo if needed
@@ -47,3 +48,19 @@ python -m venv venv
 # Install dependencies (ensure this file exists in the directory)
 pip install -r requirements.txt
 
+=======
+
+```bash
+# Clone the ML repo if needed
+git clone https://github.com/abdullahazhar202rr/Machine-Learning.git
+cd "Projects/virtual try on model (totally working)"
+
+# Optional: create a virtual environment
+python -m venv venv
+.\venv\Scripts\activate
+
+# Install dependencies (ensure this file exists in the directory)
+pip install -r requirements.txt
+```
+
+>>>>>>> d7251c48884d5872e4320ffea9a2f8d023399169
