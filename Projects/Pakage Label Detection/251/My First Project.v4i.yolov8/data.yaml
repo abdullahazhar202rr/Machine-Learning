@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 5
+names: ['BB', 'Batch', 'MFG', 'RS', 'TimeStamp']
+
+roboflow:
+  workspace: abdullah-azhar-apf01
+  project: my-first-project-9md9b
+  version: 4
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/abdullah-azhar-apf01/my-first-project-9md9b/dataset/4
