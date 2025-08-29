@@ -3,6 +3,8 @@ from ultralytics import YOLO
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 from filterpy.kalman import KalmanFilter
+import pandas as pd
+import datetime
 
 # SORT implementation (from https://github.com/abewley/sort)
 
@@ -285,6 +287,12 @@ while True:
             if cross_red_down:
                 entries += 1
                 states[track_id] = 'none'
+                # Save to CSV when entries change
+                timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                inside = entries - exits
+                row = [timestamp, entries, exits, inside]
+                df = pd.DataFrame([row], columns=["timestamp", "entries", "exits", "inside"])
+                df.to_csv("shop_counts.csv", mode='a', header=not pd.io.common.file_exists("shop_counts.csv"), index=False)
             elif cross_green_up:
                 states[track_id] = 'none'
         elif state == 'exiting':
