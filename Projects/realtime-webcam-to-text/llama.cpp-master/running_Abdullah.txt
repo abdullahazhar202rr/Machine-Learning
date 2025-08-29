@@ -1,0 +1,12 @@
+conda activate llama
+
+# 1.3B parameters:
+./bin/llama-server -hf maddes8cht/nomic-ai-gpt4all-falcon-gguf:Q4_0 -ngl 1 -t 4 -c 1024 --top_k 40 --top_p 0.9
+
+# 500M parameters with cam/pic support:
+./bin/llama-server -hf ggml-org/SmolVLM-500M-Instruct-GGUF -ngl 99
+
+# 7B parameters:(Mistral-7B-Instruct = tuned for chat/assistant use → better for coding, Q&A, structured replies.)
+ ./bin/llama-server -hf TheBloke/Mistral-7B-Instruct-v0.2-GGUF -m mistral-7b-instruct-v0.2.Q4_K_M.gguf -ngl 1 -t 4 -c 1024 --top_k 40 --top_p 0.9
+  # more GPU power:
+ ./bin/llama-server -hf TheBloke/Mistral-7B-Instruct-v0.2-GGUF   -m mistral-7b-instruct-v0.2.Q4_K_M.gguf   -ngl 8 -t 4 -c 1024 --top_k 40 --top_p 0.9

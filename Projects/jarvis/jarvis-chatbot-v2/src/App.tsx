@@ -758,11 +758,12 @@ function App() {
             <div className="relative mb-4">
               <video
                 ref={videoRef}
+                id="videoFeed"
                 autoPlay
                 playsInline
                 className="w-full rounded-lg bg-slate-900"
               />
-              <canvas ref={canvasRef} className="hidden" />
+              <canvas ref={canvasRef} id="canvas" className="hidden" />
             </div>
             
             <div className="flex gap-3">
@@ -793,6 +794,7 @@ function App() {
           </div>
         </div>
       )}
+      
     </div>
   );
 }
