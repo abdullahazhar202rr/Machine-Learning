@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Local ChatGPT</title>
+<style>
+body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px;}
+textarea { width: 400px; height: 100px; }
+button { padding: 10px 20px; cursor: pointer; }
+#chat { width: 400px; max-height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; border-radius: 5px; }
+.message { margin-bottom: 10px; }
+.user { font-weight: bold; }
+</style>
+</head>
+<body>
+
+<h2>Jarvis Chat</h2>
+
+<div id="chat"></div>
+
+<textarea id="input" placeholder="Type your message..."></textarea>
+<button id="sendBtn">Send</button>
+
+<script>
+const chatDiv = document.getElementById('chat');
+const input = document.getElementById('input');
+const sendBtn = document.getElementById('sendBtn');
+
+async function sendMessage() {
+    const userText = input.value.trim();
+    if(!userText) return;
+
+    // Display user message
+    const userMsg = document.createElement('div');
+    userMsg.className = 'message user';
+    userMsg.textContent = 'You: ' + userText;
+    chatDiv.appendChild(userMsg);
+
+    input.value = '';
+    chatDiv.scrollTop = chatDiv.scrollHeight;
+
+    // Send to llama server
+    const response = await fetch('http://127.0.0.1:8080/v1/chat/completions', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            max_tokens: 200,
+            messages: [{role: 'user', content: userText}]
+        })
+    });
+
+    const data = await response.json();
+    const modelText = data.choices[0].message.content;
+
+    // Display model response
+    const modelMsg = document.createElement('div');
+    modelMsg.className = 'message';
+    modelMsg.textContent = 'Jarvis: ' + modelText;
+    chatDiv.appendChild(modelMsg);
+
+    chatDiv.scrollTop = chatDiv.scrollHeight;
+}
+
+sendBtn.addEventListener('click', sendMessage);
+input.addEventListener('keypress', (e) => {
+    if(e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
+</script>
+
+</body>
+</html>
