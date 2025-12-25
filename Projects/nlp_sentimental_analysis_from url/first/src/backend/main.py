@@ -118,7 +118,7 @@ def detect_source_type(url: str) -> str:
     if "youtube.com" in url_lower or "youtu.be" in url_lower:
         return "youtube"
     elif "twitter.com" in url_lower or "x.com" in url_lower:
-        return "twitter"
+        return "twitter/X"
     else:
         return "website"
 
